@@ -330,11 +330,11 @@ When writing a new class, which is public, and can be used by others, you should
 
 #### What is a stub?
 
-Stub is an overly simplified version of a class. It has the minimal number of methods, which are required by the header, and they usually have only one line: return a hard-coded value. A stub is usually the minimal code which satisfies the compiler check.
+**Stub** is an overly simplified version of a class. It has the minimal number of methods, which are required by the header, and they usually have only one line: return a hard-coded value. A stub is usually the minimal code which satisfies the compiler check.
 
 #### What is a fake?
 
-Fake is a bit more complicated stub. It can implement some logic, but with shortcuts to not have dependencies. For example instead of communicating with a database, it uses a predefined data structure. Can behave different ways in different situations, but still a simplified version of the DOC class.
+**Fake** is a bit more complicated stub. It can implement some logic, but with shortcuts to not have dependencies. For example instead of communicating with a database, it uses a predefined data structure. Can behave different ways in different situations, but still a simplified version of the DOC class.
 
 In reality we are usually sloppy, and use the word "stub" to stubs and fakes as well.
 
@@ -344,11 +344,15 @@ In most cases we need to inspect how the SUT communicates with other classes. Fo
 
 There are a lot of similar stuff we can inspect. Testing frameworks provide these kind of "intelligent stubs", called mocks.
 
-So a mock is a simplified substitution of a real class, which provides functionality to make expectations against it and check the satisfaction of them.
+So a **mock** is a simplified substitution of a real class, which provides functionality to make expectations against it and check the satisfaction of them.
 
-#### Other helpers
+#### Where do mocks come from?
+
+(Here and later sometimes I use the work "mock" for all mocks, stubs and fakes too. Also when I write "mocking" it can mean the act of creating a mock, a stub or a fake and use it to substitute a real class.)
 
 So when you test your class, function, module it is usually surrounded by mocks, stubs and fakes. Of course it means extra work, because you need to create mock for practically every class in the system. It's one practice to create a mock whenever you create a new class, so it can be used later when testing *other* parts of the code. For example if I create a new class called `FinanceReport` which has dependencies and talks to the database, I also create `FinanceReportMock` to the folder where we store mocks. `FinanceReportMock` will not use real classes from the system and will not talk to the database so it can be used in isolation and runs very fast. Later, when someone else in the future writes a class, calles `FinanceReportController` which *uses* `FinanceReport` they can just use `FinanceReportMock` in the test of `FinanceReportController`. But always remember to update the interface of `FinanceReportMock` when you change the interface of the real `FinanceReport` so they always look the same. If the language supports interfaces, it's better if the real class and it's mock implements the interface (or have some common abstract parent) and everyone else uses the interface and not the concrete classes.
+
+#### Other helpers
 
 Apart from mocks, stubs and fakes there are often other things, just like helper functions, setups and teardowns, [drivers](https://www.tutorialspoint.com/software_testing_dictionary/test_driver.htm) which surround your systems under test and support testing. All these code together is called the **test harness**.
 
