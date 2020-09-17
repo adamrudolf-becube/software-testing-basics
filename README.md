@@ -38,7 +38,7 @@ Testing can slow down development process, therefore it is sometimes can be view
 
 But the experience shows that the price (even in time or in money or in complexity) of finding and fixing a bug grows exponentially during the life cycle of the product. This means that a bug costs the most, when found by the customer in the already released product, and it is significantly cheaper to fix it during testing phase. But it is even cheaper (waaay lot cheaper) if we can catch it during development time. To be short: the earlier we catch the problem, the better. And there is a huuuge difference.[1][2][3]
 
-TODO safety net and part form wewlc
+TODO safety net and part form wewlc and fear of making changes and what should be unchanged. Explain behaviour vs implementation
 
 ### Cost to Find and Fix Issues
 
@@ -134,6 +134,8 @@ A unit test should
 * phrase a piece of requirement. If someone unfamiliar with the code reads through the unit tests (or preferably only the names of the tests) should understand the purpose of the tested unit
 
 Note2: if you commit code, it should always be submitted together with the unit tests. They should never be separated or handled independently, and you don't have to emphasize for a commit that it also includes unit tests, because that is always mandatory part anyway.
+
+TODO add "test is not unittest if" from the book
 
 #### The F.I.R.S.T. principles
 
@@ -294,6 +296,8 @@ There are automated tools to measure coverage, and usually they generate a nice 
 
 ### Separate the SUT (System under test) from the dependencies (DOC)
 
+TODO clarify that it applies only to specific parts of code
+
 We would like to test a specific part of code, called **System Under Test** (SUT). It can be a function or a class in case of unit tests, or modules, libraries, software blocks in case of module tests. The SUT is what you are testing right now.
 
 Every entity has inputs and outputs. During testing, we need to ensure that the entity gives the right output for a specific input.
@@ -304,10 +308,38 @@ Example: you want to test a controller class, but it uses a model class inside, 
 
 Wrong! We just pick the SUT, and not any real classes around it. The point is that we need some simplified substitutes instead of the DOC-s, which have the same interface towards our SUT, but are not dependent on any other classes. With simpler words in the above example you use your real controller (because that's what you want to test), but a fake model which looks like the real one, but doesn't use other classes and a dabatase connection in the background. It just have the same interface towards the SUT, but returns predefined values for function calls instead of reading them from the DB.
 
-These substitutes can be called stubs, fakes or mocks. We will return to these soon.
+These substitutes can be called **stubs**, **fakes** or **mocks**. We will return to these soon.
 
 The interaction of classes in a real code can be propagated forever. The whole product is coherent in some way.
 
 When testing a class (SUT), only its surrounding is simulated, without their dependencies.
 
 How can we achieve this? Differently in every language.
+
+The point is that you can dynamically provide which dependency your SUT uses. For example you have a `Room` and a `RoomMock` class. In the real code your `RoomController` uses the `Room`, but when testing it has to use the `RoomMock`.
+
+If you use a strongly typed object oriented language the `Room` and `RoomMock` 
+
+TODO finish
+
+(In C++, it is quite simple: every class is included by its headers, or even just as an interface, and we can provide any implementation for it, using the build.spec files. If we use the same header, the SUT will think it communicates with the correct class, but we will use a simplified implementation, so we don't have to go further with the dependencies.
+
+When writing a new class, which is public, and can be used by others, you should always provide stub or mock implementation to it as well in the test/export (or corresponding) folder.
+
+#### What is a stub?
+
+Stub is an overly simplified version of a class. It has the minimal number of methods, which are required by the header, and they usually have only one line: return a hard-coded value. A stub is usually the minimal code which satisfies the compiler check.
+
+#### What is a fake?
+
+Fake is a bit more complicated stub. It can implement some logic, but with shortcuts to not have dependencies. For example instead of communicating with a database, it uses a predefined data structure. Can behave different ways in different situations, but still a simplified version of the DOC class.
+
+In reality we are usually sloppy, and use the word "stub" to stubs and fakes as well.
+
+#### What is a mock?
+
+In most cases we need to inspect how the SUT communicates with other classes. For example: our brand new class needs to raise an alarm when the destructor is called. How do we check it? We cannot raise a real alarm, and cannot use the framework for raising alarms, because it would bring a lot of dependencies and complexity to our simple test. So we have to have something similar to a stub for the "alarm raising framework". But we also need to check whether the raiseAlarm() function of it has been called or not. Our stub has to be intelligent enough to indicate to the testing framework that a specific function of it has been called, or not, and make the test fail if not.
+
+There are a lot of similar stuff we can inspect. Testing frameworks provide these kind of "intelligent stubs", called mocks. In Gtest, they are special classes, generated by macros.
+
+So a mock is a simplified substitution of a real class, which provides functionality to make expectations against it and check the satisfaction of them.
