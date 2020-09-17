@@ -30,11 +30,15 @@ There is a pretty boring tutorial generally about testing in case you want to re
 
 **Exhaustive testing** means *all* mathematically possible input combinations are tested, and *all* possible potential bugs are revealed. There is a theorem in [ISTQB](https://www.istqb.org/) (International Software Testing Qualifications Board) material which says that such an exhaustive test can *never* exist. This is not a mathematical theorem, it's more like a rule of thumb, but it is a really strong statement, and everyone who does software testing should be aware of the fact that exhaustive testing is practically impossible.
 
+TODO example
+
 ### Why is testing important
 
 Testing can slow down development process, therefore it is sometimes can be viewed as time-consuming and expensive activity.
 
-But the experience shows that the price (even in time or in money or in complexity) of finding and fixing a bug grows exponentially during the life cycle of the product. This means that a bug costs the most, when found by the customer in the already released product, and it is significantly cheaper to fix it during testing phase. But it is even cheaper (way lot cheaper) if we can catch it during development time. To be short: the earlier we catch the problem, the better. And there is a huuuge difference.[1][2][3]
+But the experience shows that the price (even in time or in money or in complexity) of finding and fixing a bug grows exponentially during the life cycle of the product. This means that a bug costs the most, when found by the customer in the already released product, and it is significantly cheaper to fix it during testing phase. But it is even cheaper (waaay lot cheaper) if we can catch it during development time. To be short: the earlier we catch the problem, the better. And there is a huuuge difference.[1][2][3]
+
+TODO safety net and part form wewlc
 
 ### Cost to Find and Fix Issues
 
@@ -46,7 +50,7 @@ And as we said, we will probably not find all of the bugs, we have to find as ma
 
 The above picture is from Martin Fowler's article [Is High Quality Software Worth the Cost?](https://martinfowler.com/articles/is-quality-worth-cost.html). It shows that if you don't test your code you start faster. In the beginning you create more functionality under a specified time. But later, when your code becomes more complex you will spend much more time by finding and fixing bugs then by actual development.
 
-If you test your code well, you will start slower (because you invest time in writing tests as well, not only the production code), but later you won't slow down that much. After a time this will return, so it's worth to write tests, although it seems slower at the beginning.
+If you test your code well, you will start slower (because you invest time in writing tests as well, not only the production code), but later you won't slow down that much. After a time this will return, so it's worth to write tests, although it seems slower at the beginning. How fast it will return? According to Fowler (and I gighly agree with him) as fast as in a few weeks. So writing tests is actually not that long term investment.
 
 The same applies to other quality practices, for example Clean Code.
 
@@ -106,6 +110,8 @@ An advantage of Black-Box testing is that you have the freedom to change the imp
 
 You have full knowledge and access to the implementation details of the code. It gives you more control, and less worries about tricky test implementations. It can lead to too strict tests though, where you set requirements against implementation details, which could have been written any other way. In this case, you have less freedom to change the code.
 
+DOTO explanation kepfeltoltes
+
 ### Grey-Box testing
 
 Mixture of the two, when you have some knowledge (access) to the code in the test, but not everything.
@@ -156,7 +162,7 @@ Imagine that you have to test a lamp of a car. Unit test are the following:
 2) the battery has votlage
 3) the wires transfer electricity
 
-If all of these are true, they can still fail as a system, for example because the lightbult and the battery are not designed for the same voltage. Module tests are to validate these kind of interactions. It validates that if you put together already tested units, they still work. After module tests pass, you can consider the "module" as a working block of your software.
+If all of these are true, they can still fail as a system, for example because the lightbulb and the battery are not designed for the same voltage. Module tests are to validate these kind of interactions. It validates that if you put together already tested and workin units, they still work together as a system. After module tests pass, you can consider the "module" as a working block of your software.
 
 ### Other types
 
@@ -170,9 +176,13 @@ Act of manual testing, when the tester tries to challenge the system in a quite 
 
 Done on a complete system, strictly based on the required functionality.
 
+TODO more details
+
 #### Integration testing
 
 The act, when already tested small parts are put together, and tested on a higher level progressively. Starting with unit tests, and continuing with module (block) tests is an important part of a well-done integration testing. Integration testing is simply the idea of stepping upper and upper on this ladder. [Wikipedia](https://en.wikipedia.org/wiki/Integration_testing) says: "Integration testing is the phase in software testing in which individual software modules are combined and tested as a group."
+
+TODO check this
 
 #### System testing
 
@@ -183,6 +193,8 @@ System is tested thoroughly as a whole, usually by a specialized team. If unit t
 It is a widely accepted fact that a change in a part of a software effects totally other parts of the software, often in an unexpected way. This means if you tested some parts (units, modules) and they passed, you cannot rest, because newly added changes can break them. Regression testing means re-running all of the previously passed tests when a new change is added, ensuring that the already working parts are not broken by the new feature.
 
 This also needs very good (and fast) test automation machinery and thorough unit- and module tests.
+
+TODO safety net again and the fear of change
 
 #### Acceptance testing
 
@@ -256,6 +268,10 @@ Means how many percent of the lines of the production code have been executed wh
 
 It's important that even if you have 100% test coverage you can have untested scenarios.
 
+TODO clarify and emphasize missing requirement vs too much code
+
+TODO nontrivial branches, like exception handling
+
 For example if the happy path runs a function from the beginning to the end, your happy path test will provide you 100% coverage. But you can still have requirements for the cases your code throws an exception in the middle of that function.
 
 Or if you have 10 independent if blocks after each other the execution can run them in 1024 different combinations. If you have a test where all 10 of the conditions are true, you will have 100% line coverage, while you tested 1 scenario and didn't test 1023.
@@ -273,3 +289,25 @@ Uncovered code means that you are unable to detect the breaking of this code whe
 But as in the case of the line coverage none of them is omnipotent, and none of them should be used as the only goal or the only measurement.
 
 There are automated tools to measure coverage, and usually they generate a nice html output where you can see color coded which parts of your code are not covered. Test coverages (most often line coverage) can be used in CI to block a pull request from merging if the coverage is below a certain limit.
+
+## Practical stuff
+
+### Separate the SUT (System under test) from the dependencies (DOC)
+
+We would like to test a specific part of code, called **System Under Test** (SUT). It can be a function or a class in case of unit tests, or modules, libraries, software blocks in case of module tests. The SUT is what you are testing right now.
+
+Every entity has inputs and outputs. During testing, we need to ensure that the entity gives the right output for a specific input.
+
+In the code, there is always a set of parts (functions, classes, interfaces, software units, blocks, etc.) interacting with each other. How can we pull out the entity (like a class) from the surroundings, when it relies on a lot of other classes, and those other classes also need a lot of other classes t work? The classes, or whatever pieces of software the SUT is dependent on are called **Depended-On Component** (DOC). (Definition from xUnit.) 
+
+Example: you want to test a controller class, but it uses a model class inside, so to be able to run your controller you need to use the model as well. But the model uses underlying datastructures, which need to be included too, and a lot of helper classes for example to convert images. Then, and this is quite a big problem, your model is trying to communicate with the database. Not speaking about all of the classes your classes inherit from. So now that you wanted to test your controller separately suddenly you need to bring up kind of the whole system with a fully functioning database connection. Right?
+
+Wrong! We just pick the SUT, and not any real classes around it. The point is that we need some simplified substitutes instead of the DOC-s, which have the same interface towards our SUT, but are not dependent on any other classes. With simpler words in the above example you use your real controller (because that's what you want to test), but a fake model which looks like the real one, but doesn't use other classes and a dabatase connection in the background. It just have the same interface towards the SUT, but returns predefined values for function calls instead of reading them from the DB.
+
+These substitutes can be called stubs, fakes or mocks. We will return to these soon.
+
+The interaction of classes in a real code can be propagated forever. The whole product is coherent in some way.
+
+When testing a class (SUT), only its surrounding is simulated, without their dependencies.
+
+How can we achieve this? Differently in every language.
