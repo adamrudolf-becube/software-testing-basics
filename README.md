@@ -447,6 +447,8 @@ After consultation with the customer you identify:
 
 How do you test it with the server and connection? There are different approaches, I will show you two. You should always understand which one is more suitable for your case. In the first approach you consider it as one series of events and one system. In the other case you strictly consider your class as the SUT and you split to separate cases to exclude the server from your tests.
 
+![Approaches](approaches.png).
+
 #### Consider it one series of events
 
 You think of your class and the server as one system. Actually you think of `AwesomeClass` as an interface which hides the server and the responsibility of this system is to display the message when you call the `AwesomeClass.displayServerMessage()` method.
