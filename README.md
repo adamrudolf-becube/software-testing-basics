@@ -36,7 +36,9 @@ TODO example
 
 Testing can slow down development process, therefore it is sometimes can be viewed as time-consuming and expensive activity.
 
-But the experience shows that the price (even in time or in money or in complexity) of finding and fixing a bug grows exponentially during the life cycle of the product. This means that a bug costs the most, when found by the customer in the already released product, and it is significantly cheaper to fix it during testing phase. But it is even cheaper (waaay lot cheaper) if we can catch it during development time. To be short: the earlier we catch the problem, the better. And there is a huuuge difference.[1][2][3]
+But the experience shows that the price (even in time or in money or in complexity) of finding and fixing a bug grows exponentially during the life cycle of the product. This means that a bug costs the most, when found by the customer in the already released product, and it is significantly cheaper to fix it during testing phase. But it is even cheaper (waaay lot cheaper) if we can catch it during development time. To be short: the earlier we catch the problem, the better. And there is a huuuge difference.
+(Some sources: [CrossBrowserTesting: What’s the True Cost of a Software Bug?](https://crossbrowsertesting.com/blog/development/software-bug-cost/), 
+[synopsys: How much do bugs cost to fix during each phase of the SDLC?](https://www.synopsys.com/blogs/software-security/cost-to-fix-bugs-during-each-sdlc-phase/), [The Celerity Blog: The True Cost of a Software Bug: Part One](http://blog.celerity.com/the-true-cost-of-a-software-bug))
 
 TODO safety net and part form wewlc and fear of making changes and what should be unchanged. Explain behaviour vs implementation
 
@@ -122,7 +124,7 @@ There are a lot of different levels (or types?) of tests. Developers meet only w
 
 ### Unit testing
 
-The most important test type for a developer. Unit testing[4] is when you test the smallest testable part (the unit) of the software. A unit does not have a strict definition. Usually this is a function, method, or sometimes a class. Since a unit should be the undividable "atom" of the code, no interactions are tested in unit tests. The purpose of the unit test is to ensure every building block is working as intended.
+The most important test type for a developer. [Unit testing](https://en.wikipedia.org/wiki/Unit_testing) is when you test the smallest testable part (the unit) of the software. A unit does not have a strict definition. Usually this is a function, method, or sometimes a class. Since a unit should be the undividable "atom" of the code, no interactions are tested in unit tests. The purpose of the unit test is to ensure every building block is working as intended.
 
 Although it is not set in stone, unit tests are the only tests, which are always written by the developer, simultaneously with the production code.
 
@@ -149,7 +151,7 @@ This abbreviation they often mention describes how unit test should be:
 
 #### Unit testing frameworks
 
-There are either built in or 3rd party frameworks for practically all languages, such as Jtest for Java, unittest for Python. C++ has limited built in functionalities to help unit testing, but there is an open source 3rd party framework provided by Google, called Google Test[5]. PHP uses PHPUnit. Golang has a builtin unit testing framework which can be extended by libraries to be more useful.
+There are either built in or 3rd party frameworks for practically all languages, such as Jtest for Java, unittest for Python. C++ has limited built in functionalities to help unit testing, but there is an open source 3rd party framework provided by Google, called [Google Test](https://github.com/google/googletest). PHP uses PHPUnit. Golang has a builtin unit testing framework which can be extended by libraries to be more useful.
 
 These frameworks help to write tests easier, also automatically identify and group unit test, run them and evaluate their result and give feedback. In some less advanced frameworks you have a separate file where you list all your tests. But with some frameworks you don't need to do that. If you use the correct folder structure and naming conventions (e.g. prefixing your test functions with `test_`) the framework will find all of them in your project automatically. This is called automatic test discovery.
 
@@ -214,7 +216,7 @@ Acceptance test outside of the developer's site, by external parties, like a lim
 
 ### TDD - Test Driven Develpment
 
-Test Driven Development, or TDD for short [6] is related to Extreme Programming [7]. It takes the principle of testing as early as possible, and puts it to the extreme: write the test before the code itself.
+[Test Driven Development, or TDD for short](https://en.wikipedia.org/wiki/Test-driven_development) is related to [Extreme Programming](https://en.wikipedia.org/wiki/Extreme_programming). It takes the principle of testing as early as possible, and puts it to the extreme: write the test before the code itself.
 
 It has 3 steps which you should repeat:
 
@@ -233,7 +235,7 @@ It can be very strange at first, but it has a lot of supporters. The arguments f
 
 ### BDD - Behaviour Driven Develpment
 
-After TDD, a lot of "X"DD ("'something' Driven Development") emerged. The most well-known is BDD, the Behaviour Driven Development.[8]
+After TDD, a lot of "X"DD ("'something' Driven Development") emerged. The most well-known is BDD, the [Behaviour Driven Development](https://en.wikipedia.org/wiki/Behavior-driven_development).
 
 BDD is not an alternative to TDD or unit testing, it rather completes them, and gives advices how to write the tests.
 
@@ -241,7 +243,7 @@ The general principle of BDD is that you should phrase your requirements (== tes
 
 #### The given-when-then approach
 
-The main practical advice of BDD is the Given-When-Then principle[9].
+The main practical advice of BDD is the [Given-When-Then principle](https://martinfowler.com/bliki/GivenWhenThen.html).
 
 It says that when you design a test scenario, you should build it around these 3 keypoints:
 
@@ -262,7 +264,7 @@ There other <X>DD "something" Driven Development techniques, but we don't need t
 
 ### Coverage
 
-You can measure how well did you write your tests in some ways, one is the different types of coverages.[10]
+You can measure how well did you write your tests in some ways, one is the [different types of coverages](https://en.wikipedia.org/wiki/Code_coverage).
 
 #### Line coverage
 
@@ -546,16 +548,3 @@ For example: verify_connect_xReqIsSentUnconditionally, and verify_connect_messag
 But again: use your common sense.
 
 Keep in mind: usually hundreds of tests are run, and maybe the runner only sees the list of the names and that which one failed. It should be easy to understand, what failed, and how to locate it.
-
-## References
-
-1 CrossBrowserTesting: What’s the True Cost of a Software Bug? - https://crossbrowsertesting.com/blog/development/software-bug-cost/
-2 synopsys: How much do bugs cost to fix during each phase of the SDLC? - https://www.synopsys.com/blogs/software-security/cost-to-fix-bugs-during-each-sdlc-phase/
-3 The Celerity Blog: The True Cost of a Software Bug: Part One , http://blog.celerity.com/the-true-cost-of-a-software-bug
-4 Unit testing, Wikipedia https://en.wikipedia.org/wiki/Unit_testing
-5 Google Test on Github https://github.com/google/googletest
-6 Test Driven Development https://en.wikipedia.org/wiki/Test-driven_development
-7 Extreme Programming https://en.wikipedia.org/wiki/Extreme_programming
-8 Behavoiur Driven Development https://en.wikipedia.org/wiki/Behavior-driven_development
-9 Given When Then https://martinfowler.com/bliki/GivenWhenThen.html
-10 Code coverage https://en.wikipedia.org/wiki/Code_coverage
