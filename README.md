@@ -354,25 +354,35 @@ So when you test your class, function, module it is usually surrounded by mocks,
 
 For example if I create a new class called `FinanceReport` which has dependencies and talks to the database, I also create `FinanceReportMock` to the folder where we store mocks. `FinanceReportMock` will not use real classes from the system and will not talk to the database so it can be used in isolation and runs very fast, but implements the same interface to the outside world as `FinanceReport`.
 
-Later, when someone else in the future writes a class, called `FinanceReportController` which *uses* `FinanceReport` they can just use `FinanceReportMock` in the test of `FinanceReportController`. But always remember to update the interface of `FinanceReportMock` when you change the interface of the real `FinanceReport` so they always look the same. If the language supports interfaces, it's better if the real class and it's mock implements the interface (or have some common abstract parent) and everyone else uses the interface and not the concrete classes.
+Later, when someone else in the future writes a class, called `FinanceReportController` which *uses* `FinanceReport` they can just use `FinanceReportMock` in the test of `FinanceReportController`.
+
+Always remember to update the interface of `FinanceReportMock` when you change the interface of the real `FinanceReport` so they always look the same. If the language supports interfaces, it's better if the real class and it's mock implements the interface (or have some common abstract parent) and everyone else uses the interface and not the concrete classes.
 
 #### Other helpers
 
 Apart from mocks, stubs and fakes there are often other things, just like helper functions, setups and teardowns, [drivers](https://www.tutorialspoint.com/software_testing_dictionary/test_driver.htm) which surround your systems under test and support testing. All these code together is called the **test harness**.
 
-It sounds comlicated, but trust me, it will make your life much simpler and development faster.
+It sounds complicated, but trust me, it will make your life much simpler and development faster.
 
 ### Do I need to mock every dependency? Can't I just use real classes in tests?
 
-Yes. You don't have to mock *everything*. There is no straight line, it is usually common sense, but you can keep some rules in mind:
+No, you don't and yes, you can. Sometimes. You don't have to mock *everything*. There is no straight line, it is usually common sense, but you can keep some rules in mind:
 
-* Mocking (and stubbing and faking) is to resolve dependency issues, and make expectations. If you don't have problems with dependencies and you have no expectations, it's OK to use the real one.
+* Mocking (and stubbing and faking) is to resolve dependency issues, and make expectations. If you don't have problems with dependencies and you have no expectations, (and it doesn't make your tests slower) it's OK to use the real one.
 * Usually when the class is in the same abstraction level as the SUT, it is stubbed or mocked (they are "next to each other"). But if the class is contained by the SUT (is "inside it"), the real one often can be used, because it will not continue the dependency chain. Also, in this case this other class can be considered as the inside working of SUT (like a subcontractor). We often say, that you don't mock the builtin classes of the language like string, because you consider that already tested. If your own, already tested utility class is inside the SUT, just use the real one. But remember, nothing is set in stone! Follow your common sense!
 * Only use real class if it has been tested in an earlier phase, so it can be considered trustable. Otherwise if the test fails, you don't know if your currently tested class broke it or the one you included. Never rely on "equally new" classes in your test. You should rather mock them.
 
+### Who tests the tests?
+
+TODO
+
+mock and test is not tested simple
+
+todo section about mocking example and breakingo ut parts
+
 ### Organizing tests
 
-Tests are organized to groups so it's easier to find them, to understand what they do and importantly so you can execute a subset of them, which, for example are testing the same class or function. How you physically organize your test files can vary from framework to framework, from language to language or can be dependent on your own team's conventions. However some vocabulary is common and you can here people say **test case**, **test suite**, **test fixture**, **test harness** and such things.
+Tests are organized to groups so it's easier to find them, to understand what they do and importantly so you can execute a subset of them, which, for example are testing the same class or function. How you physically organize your test files can vary from framework to framework, from language to language or can be dependent on your own team's conventions. However some vocabulary is common and you can hear people say **test case**, **test suite**, **test fixture**, **test harness** and such things.
 
 #### What is a test case?
 
@@ -386,6 +396,8 @@ For example TODO
 
 *Nitpicking note*: "test suite" is often pronounced wrong. It should be pronounced similar to *sweet* and not like *suit*. (Note that "suit" and "suite" are not the same word.)
 
+*Note 2*: this vocabulary can be different in different contexts. For example Google's C++ testing framework GTEST uses the term TestCase to the concept we described here as test suite and uses Test to the concept we described here as test case. Confusing. Always check what you should use in your context.
+
 #### What is a test fixture?
 
 [Test fixture](https://en.wikipedia.org/wiki/Test_fixture) is a test suite, which can have it's own state, by having own data members, and helper methods as well. Test fixture is often technically a class which contains test methods, and other helper stuff. These members are usually the SUT, the stubs and the mocks.
@@ -393,6 +405,8 @@ For example TODO
 If multiple tests use the same set of mocks, they are grouped together in a test fixture, so you have to define them only once and concentrate on the expectations and actions in the tests.
 
 Often test fixture and test suite is used interchangably, but actually there is difference. Sometimes I will call text fixtures test suite in this document as well. Please don't be confused.
+
+TODO add example
 
 ##### Setup
 
@@ -410,8 +424,136 @@ Setups can be defined in different hierarchy levels, for example it is possible 
 
 Teardown is the reflection of setup in the mirror. It is executed automatically after every test in the test suite. Usually it is used to clean up. Typically a badly written teardown can cause memory leaks. It is not mandatory to have setup or teardown.
 
-It is important to know that the fixture classes object is created and deleted for every single test. It's **not** like setup runs once and then every testcase is run, and then teardown is run. Instea in every testcase a new object is created, setup is run, one testcase is run and teardown is run, then the object is destructed. Then a new test object is created, setup is run, the second testcase is run and teardown is run, and the object gets detrpyes. And so on. So the tests are totally independent, the second test will not "remember" what happened in the first one.
+It is important to know that the fixture classes object is created and deleted for every single test. It's **not** like setup runs once and then every testcase is run, and then teardown is run. Instea in every testcase a new object is created, setup is run, one testcase is run and teardown is run, then the object is destructed. Then a new test object is created, setup is run, the second testcase is run and teardown is run, and the object gets destroyed. And so on. So the tests are totally independent, the second test will not "remember" what happened in the first one.
 
 #### What is a test harness?
 
 As mentioned earlier, a test harness is the test environment of stubs, fakes, mocks, drivers and helpers. All the code you wrote for testing apart from the tests themselves.
+
+### What is the scope of a test? An example with 2 possible solutions
+
+You have to decide strictly what is the SUT, and where the boundaries are. If the control flow exits the boundaries, the test case ends. Any entry point to the system should be a new test case (or set of test cases). If this sounds too abstract, here is an example:
+
+You have a cusomer who asks you do implement a new feature. You need to create a method in `AwesomeClass`, called `AwesomeClass.displayServerMessage()`. Your client says when it's called, it should send an request to a server, wait for the response, and when the response is received, display the message in it. Note that the server has been in place, you don't touch that, your task now is only to implement `AwesomeClass.displayServerMessage()`.
+
+You realize that the server can respond by a correctly formatted message, or a successful message but with the wrongformat, by an error (like status `404` or any unsuccessful) or not respond at all for a given time.
+
+After consultation with the customer you identify:
+
+1. In case of a successful and well formatted message the content should be displayed in a UI. (Of yourse you have a definition of formatting.)
+2. In case of a successful, but wrongly formatted message `"Unsupported message format"` should be displayed in the UI.
+3. In case of an error message `"Server error"` should be displayed on the UI.
+4. In case of no response comes after 5 seconds `"No response from server"` should be displayed on the IO.
+
+How do you test it with the server and connection? There are different approaches, I will show you two. You should always understand which one is more suitable for your case. In the first approach you consider it as one series of events and one system. In the other case you strictly consider your class as the SUT and you split to separate cases to exclude the server from your tests.
+
+#### Consider it one series of events
+
+You think of your class and the server as one system. Actually you think of `AwesomeClass` as an interface which hides the server and the responsibility of this system is to display the message when you call the `AwesomeClass.displayServerMessage()` method.
+
+In your setup you create the server instance and the `AwesomeClass` instance, and create the connection between them. Probably you don't want to use a real server and a real connection so you use a mock for the server. Actually in this case the server should have a fake. This fake should be told what to respond when it gets a request.
+
+You will have tests something like these:
+
+In the setup you set up the `AwesomeClass` instance and the `ServerFake` instance. You make the `AwesomeClass` instance to use the `ServerFake` as it's server.
+
+And the testcases:
+
+1. You tell the `ServerFake` to respond by a `"hello"` message when it gets a request. Then you call `AwesomeClass.displayServerMessage()` and assert that `"hello"` is displayed.
+2. You tell the `ServerFake` to respond by a wrongly formatted response when it gets a request. Then you call `AwesomeClass.displayServerMessage()` and assert that `"Unsupported message format"` is displayed.
+3. You tell the `ServerFake` to respond by an error, you call `AwesomeClass.displayServerMessage()` and assert that `"Server error"` is displayed.
+4. You tell the `ServerFake` to not respond at all, you call `AwesomeClass.displayServerMessage()` and assert that `"No response from server"` is displayed when the timput is passed. Note that in this case you want to set the timeout to milliseconds because you don't want the class to wait 5 seconds every time you execute this testcase.
+
+Notes:
+* This approach requires `ServerFake`, a little bit clever fake to respont what you want it to respond. It means you have to implement this fake class which has it's own variables and logic.
+* This fake just responds and doesn't judge whether the `AwesomeClass` did it right or not.
+* You had to write your production code in a way so you can test it. It means you need to be able to set which server it uses and also you need to be able to set the timeout. If you don't test yuor code, maybe these features are not needed. So keep in mind when writing code that you need to write it in a way it's testable.
+* Your argument here is that you test the interface towards the user: you put something in at an end of a system and check what comes back at the same end.
+* In this case your fake is part of the system. So you call the `displayServerMessage()` and the control flow goes the whole way to the server and back again. Your testcase can fail if something bad happens inside the server so it doens't only validate `AwesomeClass`. In more complicated cases more complicated fakes can be needed and this approach can be problematic. But in some cases it is the simpler choice.
+
+#### Strictly test the SUT
+
+In this approach you consider only `AwesomeClass` the system under test and the server as something separate. As soon as the control flow leaves the `AwesomeClass` the testcase ends.
+
+In this case you can have 2 test fixtures:
+
+In the fist one you create an `AwesomeClass` instance, a `ServerMock` instance and you connect them. There will be one testcase in it.
+
+1. when `AwesomeClass.displayServerMessage()` is called, then a request is sent
+
+That's it, `AwesomeClass`'s responsitilbity is only to send the request, it doesn't have control over what the response will be. So the second suite is to check what if we are already waiting for the response:
+
+With pseudo code it's something like this:
+
+```
+class AwesomeClassExistsWithServerConnection extends TestFiture {
+	function setUp() {
+		AwesomeClass awesomeClassUnderTest = new AwesomeClass();
+		Server server = new ServerMock();
+		awesomeClassUnderTest.makeConnection(server);
+	}
+	
+	function test_whenDisplayServerMessageIsCalledRequestIsSentToServer() {
+		server.expectRequest({ /* request data */ });
+		awesomeClassUnderTest.displayServerMessage();
+	}
+}
+```
+
+In the second suite's setup you create an `AwesomeClass` instance, a `ServerMock` instance and you connect them and call the `AwesomeClass.displayServerMessage()` so it sends the request. This is the starting point (the "given") of all testcases in this suite (given the request is sent). Note that this setup is the same as the first suite's setup, plus calling `AwesomeClass.displayServerMessage()`. In practice test fixtures are often classes which inhherit from each other. This second fixture can be the child of the first one where the setup just calls the setup of the previous fixture and calls `AwesomeClass.displayServerMessage()`.
+
+
+```
+class AwesomeHasSentRequestToServerConnection extends AwesomeClassExistsWithServerConnection {
+	function setUp() {
+		parent.setUp();
+		awesomeClassUnderTest.displayServerMessage();
+	}
+	
+	...
+}
+```
+
+And the testcases are:
+
+2. You make the server respond with a correctly formatted response containing `"Hello"` and assert that `"Hello"` is displayed.
+2. You make the server respond with an incorrectly formatted response and assert that `"Unsupported message format"` is displayed.
+3. You make the server respond with an error code response and assert that `"Server error"` is displayed.
+4. You tell the `ServerFake` to not respond at all, you call `AwesomeClass.displayServerMessage()` and assert that `"No response from server"` is displayed when the timput is passed. Note that in this case you want to set the timeout to milliseconds because you don't want the class to wait 5 seconds every time you execute this testcase.
+
+And of course others for the case when 3) reject comes back instead of CFM, and 4) nothing comes back and system times out.
+
+Notes:
+* If the server doesn't respond correctly that is not the fault of `AwesomeClass`. One advantage of this approach is to completely take behaviour of the server out of the tests and only tests what is the responsibility if the SUT. The approach above have assumptions coded inside the testcase about how the server works. If the real server does something we didn't expect that can cause a bug the testcase doesn't catch.
+* Here you are not testing one interface: you put something in at one interface and check if something else comes out in the other end.
+* This approach is more suitable for low level tests. It is stricter separation of elements, which, after tested separately can be put together and be tested as a whole system with a real `AwesomeClass` and a real server. That testcase is also valid, but it's high level while the ones I described are low level usittests.
+* Whichevery you do you will end up higher level tests testing the interaction of the real `AwesomeClass` and real server. If both of `AwesomeClass` and server tests pass, but they fail as a system you will know there is a problem with how they interact. This is very good to localize your errors.
+
+### Black-Box testing
+
+Also, you should consider it as a black box. This is the requirement, and not *how* it is done. So the implementation can be changed in the future, but as long as the function does the same thing, all tests should still pass. If you write too strict requirements against "private parts", you will not have the freedom to change the implementation, although the details are not really required by anyone.
+
+### Naming
+
+There is no commonly used rule for naming, but we have our internal habits:
+
+verify_<function under test>_<GivenWhenThenShortly>
+
+For example: verify_connect_xReqIsSentUnconditionally, and verify_connect_messageIsReturnedWhenXCfmIsReceived
+
+But again: use your common sense.
+
+Keep in mind: usually hundreds of tests are run, and maybe the runner only sees the list of the names and that which one failed. It should be easy to understand, what failed, and how to locate it.
+
+## References
+
+1 CrossBrowserTesting: What’s the True Cost of a Software Bug? - https://crossbrowsertesting.com/blog/development/software-bug-cost/
+2 synopsys: How much do bugs cost to fix during each phase of the SDLC? - https://www.synopsys.com/blogs/software-security/cost-to-fix-bugs-during-each-sdlc-phase/
+3 The Celerity Blog: The True Cost of a Software Bug: Part One , http://blog.celerity.com/the-true-cost-of-a-software-bug
+4 Unit testing, Wikipedia https://en.wikipedia.org/wiki/Unit_testing
+5 Google Test on Github https://github.com/google/googletest
+6 Test Driven Development https://en.wikipedia.org/wiki/Test-driven_development
+7 Extreme Programming https://en.wikipedia.org/wiki/Extreme_programming
+8 Behavoiur Driven Development https://en.wikipedia.org/wiki/Behavior-driven_development
+9 Given When Then https://martinfowler.com/bliki/GivenWhenThen.html
+10 Code coverage https://en.wikipedia.org/wiki/Code_coverage
