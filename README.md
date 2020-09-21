@@ -46,7 +46,33 @@ But the experience shows that the price (even in time or in money or in complexi
 (Some sources: [CrossBrowserTesting: What’s the True Cost of a Software Bug?](https://crossbrowsertesting.com/blog/development/software-bug-cost/), 
 [synopsys: How much do bugs cost to fix during each phase of the SDLC?](https://www.synopsys.com/blogs/software-security/cost-to-fix-bugs-during-each-sdlc-phase/), [The Celerity Blog: The True Cost of a Software Bug: Part One](http://blog.celerity.com/the-true-cost-of-a-software-bug))
 
-TODO safety net and part form wewlc and fear of making changes and what should be unchanged. Explain behaviour vs implementation
+### It's not just important, it's very important. It's necessary
+
+Having tests can bring us advantages we don't even thing in advance. I will add a few thought about that.
+
+Having automated tests instead of manual first seems like doing the same thing faster. It is true in some sense, but having them faster enables us *to do different things* and not just do the same thins faster. This quantitative difference becomes a qualitative difference and we start working in a totally different way which has more advantages than we often expect.
+
+It is a generally accepted fact that code rots. However you start with the code it will become tangled, hard to read. Fixing bugs and adding new features become extreme slow and expensive. And not just slow and expensive, but dangeour as well, because when you change something, you can never know what you break and you introduce bugs which are, again, slow and expensive and introduce new bugs. Etc.
+
+It's very important that code has **implementation** and **behaviour**. Behaviour is what the user can see, it's what I can show to my mom. Implementation is how the code is structured, what technical solutions are chosen. The same behaviour can be implemented in thousands of different ways. And there are good ways and bad ways.
+
+In order to avoid code rot and not end up in a state where you are simply too afraid to make changes, we need to refactor. Whole [Clean Code](https://www.amazon.com/Clean-Code-Handbook-Software-Craftsmanship/dp/0132350882) book and [Design Patterns](https://www.adlibris.com/se/bok/design-patterns-9780201633610?gclid=Cj0KCQjwnqH7BRDdARIsACTSAduUcTgb8yFs09Q0S50DSLr-7XMnJxH72vC3Y16wu9vrHXuuTFIxziIaAgfaEALw_wcB) are about how to structure your code. There are plenty other books as well (I really suggest [this one](https://www.adlibris.com/se/bok/head-first-design-patterns-9780596007126?gclid=Cj0KCQjwnqH7BRDdARIsACTSAduXELZdo7796rD1iY4WXUWziuZveC74bcnI-4hLnEeDmS6lAqrkSJoaAv74EALw_wcB) on Design Patterns).
+
+But how do you structure your code and not break it? You need to change the implementation while maintaining the behaviour. This is called **refactoring**. How do you make sure you don't change behaviour? Well you need to have tests in place which phrase the requirements and can check them and can be run in a rather short period of time (several times a day). If you have it, you are safe to make changes and if you run them often, you will always know which one of your changes caused the error and it will be much quicker to fix it. And the main advantage: you are not afraid to change the code and tidy it up from time to time. It will be much faster and cheaper to make changes, because you can keep your code structured. And you will have less bugs anyway, because you catch them early.
+
+Every change can break behaviour, so stop thinking in **tested** and start thinking in **covered**. You should have the possibility to run the tests and verify behaviour *any time* and quickly.
+
+Michael C. Feathers in his book [Working Effectively with Legacy Code](https://www.amazon.com/Clean-Code-Handbook-Software-Craftsmanship/dp/0132350882/ref=pd_lpo_14_t_1/143-8887909-2708226?_encoding=UTF8&pd_rd_i=0132350882&pd_rd_r=31cd39a8-5751-410e-a608-adb246fb80f5&pd_rd_w=jhuv0&pd_rd_wg=SbQsE&pf_rd_p=7b36d496-f366-4631-94d3-61b87b52511b&pf_rd_r=8RT0EFQVQX6YGVN0PMPE&psc=1&refRID=8RT0EFQVQX6YGVN0PMPE) described tests as a Software Vise. A vise is the tool carpentes use to have the working piece fixed in one position when working with it. This is how tests can fix the behaviour in one place while you change the implementation.
+
+![Vise](vise.jpg).
+
+Tests can be considered as working with a safety net. I think of them as climbing the ladder with two hands instead of one. When you change something, you let the safe and working state go and move to an unknown and dangerous new situation, like when you release the ladder with your hand to climb higher. But if you have the tests unchanged, you are still holding on it with your other hand so you won't fall.
+
+Feathers described two ways of working as *Edit and Pray*, when you edit a code part, assume where it can cause bugs and test those parts once and pray that you won't break anything else. This is *testing for correctness*, where the point of the tests are to show that the new feature you added is correct.
+
+The other (and better) way is *Cover and Modify*, is that you have a safety net of well covered automated tests so you can work in safe and modify your code with confidence. This is *testing to detect change* in behaviour.
+
+With the Edit and Pray method you can get by for a while but your code becomes unsustainable and eventually fixing bugs will eat up all your capacity and your customers will leave you.
 
 ### Cost to Find and Fix Issues
 
