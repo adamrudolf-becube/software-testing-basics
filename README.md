@@ -74,6 +74,13 @@ The other (and better) way is *Cover and Modify*, is that you have a safety net 
 
 With the Edit and Pray method you can get by for a while but your code becomes unsustainable and eventually fixing bugs will eat up all your capacity and your customers will leave you.
 
+### I already have my code in place and it's untested, what do I do?
+
+It's a hard question. There is code which is easy to test and code which is hard or impossible to test. If you write new code you can write it together with tests or at least keep in mind to write testable code. But often you have to work with legacy code which is written in a way it seems impossible to be tested.
+
+I suggest you the book I mentioned: [Working Effectively with Legacy Code](https://www.amazon.com/Clean-Code-Handbook-Software-Craftsmanship/dp/0132350882/ref=pd_lpo_14_t_1/143-8887909-2708226?_encoding=UTF8&pd_rd_i=0132350882&pd_rd_r=31cd39a8-5751-410e-a608-adb246fb80f5&pd_rd_w=jhuv0&pd_rd_wg=SbQsE&pf_rd_p=7b36d496-f366-4631-94d3-61b87b52511b&pf_rd_r=8RT0EFQVQX6YGVN0PMPE&psc=1&refRID=8RT0EFQVQX6YGVN0PMPE) from Michael C. Feathers. It contains very concrete techniques and tools how to work with the nasty code where you think there is no hope. But these are far out of the scope of this document. [Refactoring : Improving the Design of Existing Code
+](https://www.bookdepository.com/Refactoring-Martin-Fowler/9780134757599?redirected=true&utm_medium=Google&utm_campaign=Base1&utm_source=SE&utm_content=Refactoring&selectCurrency=SEK&w=AF7YAU99ZB14Y7A8VCXH&gclid=Cj0KCQjwnqH7BRDdARIsACTSAdvC2WS5NdT0J0JMDzCfm-_sPqI7PbbULjPWh-N24u_p7by6gzj-aZAaAg7hEALw_wcB) from Martin Fowler can be also a help.
+
 ### Cost to Find and Fix Issues
 
 So if you think that you can win an hour, a day, or even a few days by not testing something, keep in mind that it can cause weeks for you or someone else later.
@@ -144,7 +151,9 @@ An advantage of Black-Box testing is that you have the freedom to change the imp
 
 You have full knowledge and access to the implementation details of the code. It gives you more control, and less worries about tricky test implementations. It can lead to too strict tests though, where you set requirements against implementation details, which could have been written any other way. In this case, you have less freedom to change the code.
 
-DOTO explanation kepfeltoltes
+**Example**: white-box test can check the private variables in a class change, while a black-box test can only use the interface. Or in higher level tests a white box test can verify how the database is changes in a webapplication, while black-box test can have requirements only against what the user can see and don't care about how it's solved in the background. For example if you need to test an image upload feature a white-box test can verify that it is on the server in a specified folder. A black-box test should go where the user go on the GUI to see where they uploaded the picture.
+
+In my opinion you should use the black-box approach whenever possible, because 1) this is how the requirements are actually phrased (no user will ask you to save a picture in a specified folder on your server) and 2) leaves you more freedom to change implementation and keep the behaviour (if you change the directory where you save the images it can make a white-box test fail, while the user sees the feature unchanged). But sometimes it's impossible or just unfeasable to make end-to-end black box tests and that's when you use the white-box tests and reveal the guts of your implementation. For example it's very hard to test the e-mail or sms sending feature in a local environment. To be short, white-box tests check **implementation** and black-box tests verify **behaviour**.
 
 ### Grey-Box testing
 
@@ -167,9 +176,15 @@ A unit test should
 * be fast. There will be hundreds of unit tests, and in good case, you will run them very frequently, even in every few minutes. All tests should run in a few seconds.
 * phrase a piece of requirement. If someone unfamiliar with the code reads through the unit tests (or preferably only the names of the tests) should understand the purpose of the tested unit
 
-Note2: if you commit code, it should always be submitted together with the unit tests. They should never be separated or handled independently, and you don't have to emphasize for a commit that it also includes unit tests, because that is always mandatory part anyway.
+*Note*: if you commit code, it should always be submitted together with the unit tests. They should never be separated or handled independently, and you don't have to emphasize for a commit that it also includes unit tests, because that is always mandatory part anyway.
 
-TODO add "test is not unittest if" from the book
+*Note2*: Feathers in his book mentions that a test is not a unit test if:
+* it talks to a database
+* it communicates across a network
+* it touches the file system
+* you have to do extra steps in your environment (like configuration or edit files) in order to run them.
+
+A unit test should be extremely fast so you can run *all* your unit tests in a few minutes at worst. Or maybe a subset in every few minutes and all of them in every half an hour. And this can mean thousands of unit tests. If they run slow, it disencourages the programmer to run them. Slow tests end up being not run. If you think it's impossible to run your tests fast because of unbreakable dependencies, believe me: *it's possible*, but not easy.
 
 #### The F.I.R.S.T. principles
 
