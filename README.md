@@ -2,7 +2,7 @@
 
 ## Introduction
 
-A few decades ago the way developers tested their code was that they wrote a new piece of code, and manually tried whether it does what it should do. If yes, they were happy and integrated it to their software. So the software only contained tested and well functioning code. Right?
+A few decades ago the way developers tested their code was that they wrote a new piece of code, and manually tried whether it does what it should do. If yes, they were happy and integrated it to their software. It was *tested*. So the software only contained tested and well functioning code. Right?
 
 Well... not quite.
 
@@ -20,6 +20,8 @@ Testing for short is checking software against requirements.
 
 You can consider writing tests as writing down the requirements in the language of the code. Like instead of having them in English in a doc, you have them in C++ (or whatever language you use), so the machine can check whether your code fulfills it or not.
 
+(*Note:* in case of manual testing it can be actually a document in English. There are also automated test framework, like [Robot](https://robotframework.org/) or [FitNesse](http://fitnesse.org/FitNesse.UserGuide) which let you write higher level tests in not strictly in programming languages. Of course these are also tests, but in this document we don't concentrate on them.)
+
 So you write your own code (the *production code*) and parallelly you write your test code in the same language, which is just additional software. This test code uses your production code and decides whether it does what it should do. How exactly? This document is all about that.
 
 Every test must be a requirement you should be able to explain it to someone in a human language as well.
@@ -30,7 +32,11 @@ There is a pretty boring tutorial generally about testing in case you want to re
 
 **Exhaustive testing** means *all* mathematically possible input combinations are tested, and *all* possible potential bugs are revealed. There is a theorem in [ISTQB](https://www.istqb.org/) (International Software Testing Qualifications Board) material which says that such an exhaustive test can *never* exist. This is not a mathematical theorem, it's more like a rule of thumb, but it is a really strong statement, and everyone who does software testing should be aware of the fact that exhaustive testing is practically impossible.
 
-TODO example
+**Example**: you develop a web based application. Users can log in and there are different user roles which control rights, for example Admin, Contributor and Subscriber. Also you can set 100ish rights separately by checking checkboxes for every user on admin interface.
+
+Let's say you add a new feature "Bulk delete blogposts". You add a right setting "Bulk delete blogposts" to the admin interface so admins can decide who can bulk delete blogposts. The ones with this box checked should be able to bulk delete and vica versa, regardless of their actual user role. But checking user roles can enable/disable this box.
+
+What should you test? Well to simplify it you can check if you log in as a user who doesn't have this right and try to bulk delete, you don't manage. And then if you are logged in as a user who has the box checked in, *can*. But is it enough? Should you check these for every user role? You can say no, because the requirement is that the feature should be dependent only on the checkbox and not user roles. But how do you prove that user role does not affect the feature accidentally? You can also say requirement is that it should work for all user roles. So maybe it's a good idea to check it with every user role. But isn't it a requirement that it should not be affected by all the other rights? If you have 100 rights, how many combinations you can have? Can you physically prove that it works for all of them? What about *all* the other settings in the system? State of the database? Time dependent features? It is possible to write code which makes the bulk deletion feature dependent on those things, so it's physically possible to have those bugs. But it's impossible to test everything. Use your common sense, but be thourough.
 
 ### Why is testing important
 
