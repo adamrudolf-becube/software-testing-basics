@@ -103,7 +103,7 @@ It's only worth to skip testing if your software is developed for weeks only and
 
 Although testing is extremely important, you should always know that no testing method is omnipotent. Even if you write test for every requirement, and your code fulfills them, it doesn't mean that your code is *good*.
 
-* Keep in mind that probably you wrote the tests for the code which is also written by you. (You test your own code.) Maybe you misunderstood the requirements and requirements should have been written in a different way.
+* Keep in mind that probably you wrote the tests for your own code. Maybe you misunderstood the requirements.
 * Maybe the customer or whoever ordered the software or wrote the specification was unsure or wrong. 
 * Maybe your code fulfills the requirements, but is unusable by the user, or unreadable and unextendable by other developers.
 
@@ -111,7 +111,7 @@ Different testing practices along with comprehensive review should be applied to
 
 ### Other things
 
-A lot of other stuff can find - if you want - at [ISTQB Glossary](https://glossary.istqb.org/en/search/), like what is the definition of a bug, and a fault, and an incident, and what is the difference between them. And a lot more...
+You can find a lot of other stuff - if you want - at [ISTQB Glossary](https://glossary.istqb.org/en/search/), like what is the definition of a bug, and a fault, and an incident, and what is the difference between them. And a lot more...
 
 ## Testing types
 
@@ -123,7 +123,7 @@ This is when - what a surprise - the tester or the developer tests the system wi
 
 The drawback of it is that it's really slow and expensive. The advantage is that it's much more flexible, and able to find tricky bugs as well. It is also closer to the end user's behavior.
 
-### Automatic testing
+### Automated testing
 
 Automatic tests are run by scripts, usually scheduled, triggered by time (e.g. daily) or an event (like commit or merge to a branch). Of course it needs more software, so the work of professional testers is much more similar to the developers.
 
@@ -145,7 +145,7 @@ CI helped a lot of companies to change business model, and it made it possible t
 
 Black-Box testing is when you don't know or don't care about the internal parts of the tested code. Technically saying, you test against the interface. This is good, because you test from the user's perspective, and it forces you to test the actual requirements and not how you imagine your code should work.
 
-Of course, technically it is more complicated, because you have limited access to the code, and sometimes it is important or reasonable to see some detail of a piece of code.
+Sometimes technically it is more complicated, because you have limited access to the code, and sometimes it is important or reasonable to see some detail of a piece of code.
 
 An advantage of Black-Box testing is that you have the freedom to change the implementation details without ruining the already written testcases.
 
@@ -153,11 +153,11 @@ An advantage of Black-Box testing is that you have the freedom to change the imp
 
 You have full knowledge and access to the implementation details of the code. It gives you more control, and less worries about tricky test implementations. It can lead to too strict tests though, where you set requirements against implementation details, which could have been written any other way. In this case, you have less freedom to change the code.
 
-**Example**: white-box test can check the private variables in a class change, while a black-box test can only use the interface. Or in higher level tests a white box test can verify how the database is changes in a webapplication, while black-box test can have requirements only against what the user can see and don't care about how it's solved in the background. For example if you need to test an image upload feature a white-box test can verify that it is on the server in a specified folder. A black-box test should go where the user go on the GUI to see where they uploaded the picture.
+**Example**: white-box test can check how the private variables of a class change, while a black-box test can only use the interface. Or in higher level tests a white box test can verify how the database is changed in a webapplication, while black-box test can have requirements only against what the user can see and don't care about how it's solved in the background. For example if you need to test an image upload feature a white-box test can verify that it is on the server in a specified folder. A black-box test should go where the user go on the GUI to see where they uploaded the picture.
 
 In my opinion you should use the black-box approach whenever possible, because 1) this is how the requirements are actually phrased (no user will ask you to save a picture in a specified folder on your server) and 2) leaves you more freedom to change implementation and keep the behaviour (if you change the directory where you save the images it can make a white-box test fail, while the user sees the feature unchanged). But sometimes it's impossible or just unfeasable to make end-to-end black box tests and that's when you use the white-box tests and reveal the guts of your implementation. For example it's very hard to test the e-mail or sms sending feature in a local environment. To be short, white-box tests check **implementation** and black-box tests verify **behaviour**.
 
-Note that this is also context dependent: a unit test of a class can be black-box, but from the system's perspective it is requirements against implementation. Deciding whether a test is black/white box needs clear definition of what system/subsystem you are testing at the moment.
+Note that this is also context dependent: a unit test of a class can be black-box test from the class point of view, but from the system's perspective it is requirements against implementation. Deciding whether a test is black/white box needs clear definition of what system/subsystem you are testing at the moment.
 
 ### Grey-Box testing
 
@@ -165,7 +165,7 @@ Mixture of the two, when you have some knowledge (access) to the code in the tes
 
 ## Testing levels
 
-There are a lot of different levels (or types?) of tests. Developers meet only with unit tests and module tests 99% of the time.
+There are a lot of different levels (or types?) of tests. The most important to deveopers is usually unit testing.
 
 ### Unit testing
 
@@ -182,7 +182,7 @@ A unit test should
 
 *Note*: if you commit code, it should always be submitted together with the unit tests. They should never be separated or handled independently, and you don't have to emphasize for a commit that it also includes unit tests, because that is always mandatory part anyway.
 
-*Note2*: Feathers in his book mentions that a test is not a unit test if:
+*Note2*: Feathers in his book mentions that a test is **not** a unit test if:
 * it talks to a database
 * it communicates across a network
 * it touches the file system
@@ -217,7 +217,7 @@ Imagine that you have to test a lamp of a car. Unit test are the following:
 2) the battery has votlage
 3) the wires transfer electricity
 
-If all of these are true, they can still fail as a system, for example because the lightbulb and the battery are not designed for the same voltage. Module tests are to validate these kind of interactions. It validates that if you put together already tested and workin units, they still work together as a system. After module tests pass, you can consider the "module" as a working block of your software.
+If all of these are true, they can still fail as a system, for example because the lightbulb and the battery are not designed for the same voltage. Module tests are to validate these kind of interactions. It validates that if you put together already tested and working units, they still work together as a system. After module tests pass, you can consider the "module" as a working block of your software.
 
 ### Other types
 
@@ -237,13 +237,13 @@ You can also view integration tests as integrating new (separately tested) funti
 
 #### Functional testing
 
-Done on a complete system, strictly based on the required functionality. This is always black-box testing, end-to-end test including the whole system and phrased on a level you can discuss with your clients / users. They answer to the question whether the system functions in a way it is intended.
+Done on a complete system, strictly based on the required functionality. This is always black-box testing, end-to-end test including the whole system and phrased on a level you can discuss with your clients / users. They answer to the question whether the system functions in a way it is intended. Functional tests always verify behaviour.
 
 Since you don't need to know the details of the implementation in order to write functional test cases they can be defined by clients/managers/designers, any non-programmer who has a good knowledge of the system.
 
 #### System testing
 
-System is tested thoroughly as a whole, often by a specialized team. If integration testing starts with unit tests system test is the final step. The difference between Functional tests and System tests is Functional tests are verifications and System tests are validations.
+System is tested thoroughly as a whole, often by a specialized team. If integration testing starts with unit tests, system test is the final step. The difference between Functional tests and System tests is Functional tests are verifications and System tests are validations.
 
 * Verification: Are we building the product right?
 * Validation: Are we building the right product?
@@ -254,7 +254,7 @@ It is a widely accepted fact that a change in a part of a software effects total
 
 This also needs very good (and fast) test automation machinery and thorough unit- and module tests.
 
-Regression testing is maybe the most important reason to have automated tests as this is how you have your safety net I mentioned earlier. Well build regression tests eliminate the fear of change and enable your code to improve or at least maintain quality and not rot.
+Regression testing is maybe the most important reason to have automated tests as this is how you have your safety net I mentioned earlier. Well built regression tests eliminate the fear of change and enable your code to improve or at least maintain quality and not rot.
 
 #### Acceptance testing
 
@@ -307,7 +307,7 @@ It says that when you design a test scenario, you should build it around these 3
 2) **When**. The when section is that behavior that you're specifying. This is the input, or the trigger.
 3) **Then**. Finally the then section describes the changes you expect due to the specified behavior. This is the output, or expected result, the triggered event.
 
-A good practice is to reflect these in the name of the test. For example `given`
+A good practice is to reflect these in the name of the test. For example `givenCustomerHasAProductInShoppingCartWhenCustomerPlacesOrderTheyGetAConfirmationMessage`.
 
 In the tests, these are mapped to: given == pre-conditions, when == action, then == expectations. In most testing frameworks, they come exactly in this order, but it can be different as well.
 
@@ -387,9 +387,9 @@ The point is that you can dynamically provide which dependency your SUT uses. Fo
 
 If you use a strongly typed object oriented language the `Room` and `RoomMock` can both implement a `RoomInterface`, but in other languages, like Python or PHP it's enough that they have the same public methods and data members.
 
-But how do I do the code use the real dependencies in production code and the mocks in test code, while my class needs to be exactly the same? There are multiple ways. A simple one is to pass the dependency to the class via constructor arguments or a setter function. With this you can provide the real dependency in production and just use the mock in test. This principle is called [Dependency Injection](https://en.wikipedia.org/wiki/Dependency_injection).
+But how do I make the code use the real dependencies in production code and the mocks in test code, while my class needs to be exactly the same? There are multiple ways. A simple one is to pass the dependency to the class via constructor arguments or a setter function. With this you can provide the real dependency in production and just use the mock in test. This principle is called [Dependency Injection](https://en.wikipedia.org/wiki/Dependency_injection).
 
-If that is not possible (for example you test a class written earlier, not having tests in mind and creating dependency hard coded inline the constructor) you still have some hopes. There are things called **seam**s. Feathers describe them in his book Working Effectively with Legacy Code. The point of a seam is that whenever your code finds a function call the interpreter/precompiler/linker/compiler has a way to find it, and if you understand how your language works you can kind of hijack it. You can hack the path variable so the linker will link the mock instead of the real class and have different compilation settings for test and production. You can use precompiler directives, or just subclass your class and override a method and use the child class in tests. Describing these techniques are outside the scope of this document, but there *are* techniques to substitute dependencies with mocks/fakes/stubs.
+If that is not possible (for example you test a class written earlier, not having tests in mind and creating dependency hard coded inline the constructor) you still have some hopes. There are things called **seam**s. Feathers describe them in his book Working Effectively with Legacy Code. The point of a seam is that whenever your code runs a function call the interpreter/precompiler/linker/compiler has a way to find the implementation behind it, and if you understand how your language works you can kind of hijack it. You can hack the path variable so the linker will link the mock instead of the real class and have different compilation settings for test and production. You can use precompiler directives, or just subclass your class and override a method and use the child class in tests. Describing these techniques are outside the scope of this document, but there *are* techniques to substitute dependencies with mocks/fakes/stubs runtime without changing the place of usage.
 
 When writing a new class, which is public, and can be used by others, you should always provide stub or mock implementation to it as well in the test/export (or corresponding) folder.
 
@@ -399,7 +399,7 @@ When writing a new class, which is public, and can be used by others, you should
 
 #### What is a fake?
 
-**Fake** is a bit more complicated stub. It can implement some logic, but with shortcuts to not have dependencies. For example instead of communicating with a database, it uses a predefined data structure. It can have setters and getters where it will actually remember what you have set and return that value in a getter for example. Can behave different ways in different situations, but still a simplified version of the DOC class.
+**Fake** is a bit more complicated stub. It can implement some logic, but with shortcuts to not have dependencies. For example instead of communicating with a database, it uses a predefined data structure. It can have setters and getters where it will actually remembers what you have set and return that value in a getter for example. Can behave different ways in different situations, but still a simplified version of the DOC class.
 
 In reality we are usually sloppy, and use the word "stub" to stubs and fakes as well.
 
@@ -421,7 +421,7 @@ test_addNumbersReturnsTheCorrectSum() {
 
 In this example it was easy to check the assertions, because the function we tested gave it back to the external world.
 
-Although in most cases we need to inspect how the SUT communicates with *other classes*. For example: our brand new class needs to raise an alarm when the destructor is called. There is an alarm handling framework, which contains a class called `AlarmHandler` with a `raiseAlarm()` method. You need to call that method. Of course the `AlarmHandler` communicates with a lot of other classes and GUI elements and registers the alarm in a database.
+Although in most cases we need to inspect how the SUT communicates with *other classes*. For example: our brand new class `KeepAlive` needs to raise an alarm when the destructor is called. There is an alarm handling framework, which contains a class called `AlarmHandler` with a `raiseAlarm()` method. You need to call that method. Of course the `AlarmHandler` communicates with a lot of other classes and GUI elements and registers the alarm in a database.
 
 How do we check it? We cannot raise a real alarm, and cannot use the framework for raising alarms, because it would bring a lot of dependencies and complexity to our simple test. So we have to have something similar to a stub for the "alarm raising framework". But we also need to check whether the `raiseAlarm()` function of it has been called or not. Our stub has to be intelligent enough to indicate to the testing framework that a specific function of it has been called, or not, and make the test fail if not. With other words it needs to make internal assertions. It's a stub which is not only there to passively help but is a judge itself who can make the test fail if not satisfied. Testing frameworks provide these kind of "intelligent stubs", called mocks. So mock is a simplified substitute of a dependency with internal assertions.
 
@@ -445,7 +445,7 @@ test_alarmIsRaisedWhenKeepAliveClassIsDestructed {
 
 You usually don't need to implement the logic of mocks, they are often provided by testing frameworks or supplementary libraries.
 
-There can be different types of mocks, that check whether the methos has been called with specific arguments or *any* arguments, in a specific order or any order. There can be optional function calls expected or a function call can be expected an arbitrary number of times. For details see the documentation of the mocking framework you use.
+There can be different types of mocks, that check whether the methods has been called with specific arguments or *any* arguments, in a specific order or any order. There can be optional function calls expected or a function call can be expected an arbitrary number of times. For details see the documentation of the mocking framework you use.
 
 #### Where do mocks come from?
 
@@ -485,7 +485,7 @@ The wide-spread terminology, (and official ISTQB terminology) accepts **test cas
 
 According to ISTQB a **test suite** is a *set of test cases* that belong together in some way and are usually executed together. Grouping can be any logical rule, like they are testing the same method, and/or they start from the same state of the system (same prerequisites, or same "given"s). Test suites have names as well and make tests easier to manage by creating a hierarchical system. (Sometimes suites are grouped to bigger suites and so on to form this hieararchical structure.)
 
-**Example:** for example you have an input field on a html form which by JavaScript does some calculation and updates a number with the result somewhere else in a div. The field accepts only zero and positive numbers until 100. You write unittests to test with negative number input, -1 (these should give error message), 0 (edge cases), 1, some arbitrary positive numbers and 100 (these should give correct calculation results), 101 and bigger numbers (error message), text inputs, float inputs, huge numbers, and leaving the field empty. ALso you check what happens when you change the value from a valid number to another valid number. Is the calculation updated correctly? What if you update from valid to invalid or vica versa? You can maybe think of some other cases as well. These are a lot of simple testcases all testing the same feature, the same inputfield. You can group them to a test suite and run them together by one click or command to see the input field works as intended.
+**Example:** for example you have an input field on a html form which by JavaScript does some calculation and updates a number with the result somewhere else in a div. The field accepts only zero and positive numbers until 100. You write unittests to test with negative number input, -1 (these should give error message), 0 (edge cases), 1, some arbitrary positive numbers and 100 (these should give correct calculation results), 101 and bigger numbers (error message), text inputs, float inputs, huge numbers, and leaving the field empty. Also you check what happens when you change the value from a valid number to another valid number. Is the calculation updated correctly? What if you update from valid to invalid or vica versa? You can maybe think of some other cases as well. These are a lot of simple testcases all testing the same feature, the same inputfield. You can group them to a test suite and run them together by one click or command to see the input field works as intended.
 
 *Nitpicking note*: "test suite" is often pronounced wrong. It should be pronounced similar to *sweet* and not like *suit*. (Note that "suit" and "suite" are not the same word.)
 
@@ -532,7 +532,7 @@ As mentioned earlier, a test harness is the test environment of stubs, fakes, mo
 
 You have to decide strictly what the SUT is, and where the boundaries are. If my class sends a request to another software unit or calls a method of another class, and something happens later, is it still part of my testcase? Where should I put my expectations? If the control flow exits the boundaries, the test case ends. Any entry point to the system should be a new test case (or set of test cases). But you have some freedom whay you consider "the system". If this sounds too abstract, here is an example:
 
-You have a cusomer who asks you do implement a new feature. You need to create a method in `AwesomeClass`, called `AwesomeClass.displayServerMessage()`. Your client says when it's called, it should send a request to a server, wait for the response, and when the response is received, display the message in it. Note that the server has been in place, you don't touch that, your task now is only to implement `AwesomeClass.displayServerMessage()`. Your client says it's one testcase and it's simple as that.
+You have a customer who asks you do implement a new feature. You need to create a method in `AwesomeClass`, called `AwesomeClass.displayServerMessage()`. Your client says when it's called, it should send a request to a server, wait for the response, and when the response is received, display the message in it. Note that the server has been in place, you don't touch that, your task now is only to implement `AwesomeClass.displayServerMessage()`. Your client says it's one testcase and it's simple as that.
 
 You realize that the server can respond by a correctly formatted message, or a successful message but with the wrong format, by an error (like status `404` or any unsuccessful) or not respond at all for a given time.
 
@@ -587,7 +587,7 @@ That's it, `AwesomeClass`'s responsitilbity is only to send the request, it does
 With pseudo code it's something like this:
 
 ```
-class AwesomeClassExistsWithServerConnection extends TestFiture {
+class AwesomeClassExistsWithServerConnection extends TestFixture {
 	function setUp() {
 		AwesomeClass awesomeClassUnderTest = new AwesomeClass();
 		Server server = new ServerMock();
@@ -617,18 +617,16 @@ class AwesomeHasSentRequestToServerConnection extends AwesomeClassExistsWithServ
 
 And the testcases are:
 
-2. You make the server respond with a correctly formatted response containing `"Hello"` and assert that `"Hello"` is displayed.
+2. You make the server respond with a correctly formatted response containing `"Hello"` (action/when) and assert that `"Hello"` is displayed. (expectation/then)
 2. You make the server respond with an incorrectly formatted response and assert that `"Unsupported message format"` is displayed.
 3. You make the server respond with an error code response and assert that `"Server error"` is displayed.
 4. You tell the `ServerFake` to not respond at all, you call `AwesomeClass.displayServerMessage()` and assert that `"No response from server"` is displayed when the timput is passed. Note that in this case you want to set the timeout to milliseconds because you don't want the class to wait 5 seconds every time you execute this testcase.
-
-And of course others for the case when 3) reject comes back instead of CFM, and 4) nothing comes back and system times out.
 
 Notes:
 * If the server doesn't respond correctly that is not the fault of `AwesomeClass`. One advantage of this approach is to completely take behaviour of the server out of the tests and only tests what is the responsibility if the SUT. The approach above have assumptions coded inside the testcase about how the server works. If the real server does something we didn't expect that can cause a bug the testcase doesn't catch.
 * Here you are not testing one interface: you put something in at one interface and check if something else comes out in the other end.
 * This approach is more suitable for low level tests. It is stricter separation of elements, which, after tested separately can be put together and be tested as a whole system with a real `AwesomeClass` and a real server. That testcase is also valid, but it's high level while the ones I described are low level usittests.
-* Whichevery you do you will end up higher level tests testing the interaction of the real `AwesomeClass` and real server. If both of `AwesomeClass` and server tests pass, but they fail as a system you will know there is a problem with how they interact. This is very good to localize your errors.
+* Whichever you do you will end up higher level tests testing the interaction of the real `AwesomeClass` and real server. If both of `AwesomeClass` and server tests pass, but they fail as a system you will know there is a problem with how they interact. This is very good to localize your errors.
 
 ### Who tests the tests?
 
@@ -636,18 +634,6 @@ It sounds like tests have logic in them. Also if I use fakes and mocks I can int
 
 You are right, this has to end somewhere. If you are the one who implements a mocking framework, it is good to test wheter it checks the expectations in the way it should.
 
-What if you just create a fake which still needs to fake a quite complex behaviour? Well, maybe it's good to test that, but I think if you need that you made a mistake somewhere. Tests should be very simple and straightforward. Also they should not rely on complex sub logic. See later section "What is the scope of a test? An example with 2 possible solutions" for more details soon.
+What if you just create a fake which still needs to fake a quite complex behaviour? Well, maybe it's good to test that, but I think if you need that you made a mistake somewhere. Tests should be very simple and straightforward. Also they should not rely on complex stub logic. See section "What is the scope of a test? An example with 2 possible solutions" for more details.
 
-You need to write tests, stubs, fakes and mocks which are simple enough so they don't introduce much risk if you don't test them. So we usually say this is where it ends. We could tests our stubs but we don't and if written well it shouldn't ne necessary.
-
-### Naming
-
-There is no commonly used rule for naming, but we have our internal habits:
-
-verify_<function under test>_<GivenWhenThenShortly>
-
-For example: verify_connect_xReqIsSentUnconditionally, and verify_connect_messageIsReturnedWhenXCfmIsReceived
-
-But again: use your common sense.
-
-Keep in mind: usually hundreds of tests are run, and maybe the runner only sees the list of the names and that which one failed. It should be easy to understand, what failed, and how to locate it.
+You need to write tests, stubs, fakes and mocks which are simple enough so they don't introduce much risk if you don't test them. So we usually say this is where it ends. We could tests our stubs but we don't and if they are written well it shouldn't be necessary.
