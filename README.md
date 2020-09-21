@@ -48,7 +48,7 @@ But the experience shows that the price (even in time or in money or in complexi
 
 ### It's not just important, it's very important. It's necessary
 
-Having tests can bring us advantages we don't even thing in advance. I will add a few thought about that.
+Having tests can bring us advantages we don't even think about in advance. I will add a few thoughts about that.
 
 Having automated tests instead of manual first seems like doing the same thing faster. It is true in some sense, but having them faster enables us *to do different things* and not just do the same thins faster. This quantitative difference becomes a qualitative difference and we start working in a totally different way which has more advantages than we often expect.
 
@@ -62,13 +62,15 @@ But how do you structure your code and not break it? You need to change the impl
 
 Every change can break behaviour, so stop thinking in **tested** and start thinking in **covered**. You should have the possibility to run the tests and verify behaviour *any time* and quickly.
 
-Michael C. Feathers in his book [Working Effectively with Legacy Code](https://www.amazon.com/Clean-Code-Handbook-Software-Craftsmanship/dp/0132350882/ref=pd_lpo_14_t_1/143-8887909-2708226?_encoding=UTF8&pd_rd_i=0132350882&pd_rd_r=31cd39a8-5751-410e-a608-adb246fb80f5&pd_rd_w=jhuv0&pd_rd_wg=SbQsE&pf_rd_p=7b36d496-f366-4631-94d3-61b87b52511b&pf_rd_r=8RT0EFQVQX6YGVN0PMPE&psc=1&refRID=8RT0EFQVQX6YGVN0PMPE) described tests as a Software Vise. A vise is the tool carpentes use to have the working piece fixed in one position when working with it. This is how tests can fix the behaviour in one place while you change the implementation.
+Michael C. Feathers in his book [Working Effectively with Legacy Code](https://www.amazon.com/Working-Effectively-Legacy-Michael-Feathers/dp/0131177052) described tests as a Software Vise. A vise is the tool carpentes use to have the working piece fixed in one position when working with it. This is how tests can fix the behaviour in one place while you change the implementation.
 
 ![Vise](vise.jpg).
 
 Tests can be considered as working with a safety net. I think of them as climbing the ladder with two hands instead of one. When you change something, you let the safe and working state go and move to an unknown and dangerous new situation, like when you release the ladder with your hand to climb higher. But if you have the tests unchanged, you are still holding on it with your other hand so you won't fall.
 
-Feathers described two ways of working as *Edit and Pray*, when you edit a code part, assume where it can cause bugs and test those parts once and pray that you won't break anything else. This is *testing for correctness*, where the point of the tests are to show that the new feature you added is correct.
+Feathers described two ways of working as *Edit and Pray* and *Cover and Modify*.
+
+*Edit and Pray* is when you edit a code part, assume where it can cause bugs and test those parts once and pray that you won't break anything else. This is *testing for correctness*, where the point of the tests are to show that the new feature you added is correct.
 
 The other (and better) way is *Cover and Modify*, is that you have a safety net of well covered automated tests so you can work in safe and modify your code with confidence. This is *testing to detect change* in behaviour.
 
